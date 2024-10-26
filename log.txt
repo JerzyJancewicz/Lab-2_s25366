@@ -52,3 +52,33 @@
 2024-10-26 13:37:21,076 - INFO - Cleaned data saved to cleaned_data.csv.
 2024-10-26 13:37:21,076 - INFO - Report generated and saved to report.md.
 2024-10-26 13:37:21,076 - INFO - Script finished.
+2024-10-26 13:45:29,318 - INFO - Script started.
+2024-10-26 13:45:29,319 - INFO - Fetching data from Google Sheets.
+2024-10-26 13:45:30,454 - INFO - Data fetched successfully.
+2024-10-26 13:45:30,456 - INFO - Starting data cleaning process.
+2024-10-26 13:45:30,458 - INFO - Removed 0 rows during cleaning.
+2024-10-26 13:45:30,460 - INFO - Filled 23 missing values in 'Płeć' with 'Brak danych'.
+2024-10-26 13:45:30,461 - INFO - Filled 24 missing values in 'Wiek' with 'Brak danych'.
+2024-10-26 13:45:30,462 - INFO - Filled 19 missing values in 'Wykształcenie' with 'Brak danych'.
+2024-10-26 13:45:30,464 - INFO - Filled 20 missing values in 'Średnie Zarobki' with 'Brak danych'.
+2024-10-26 13:45:30,465 - INFO - Filled 27 missing values in 'Czas Początkowy Podróży' with 'Brak danych'.
+2024-10-26 13:45:30,466 - INFO - Filled 22 missing values in 'Czas Końcowy Podróży' with 'Brak danych'.
+2024-10-26 13:45:30,467 - INFO - Filled 15 missing values in 'Cel Podróży' with 'Brak danych'.
+2024-10-26 13:45:30,469 - WARNING - 'Płeć' contains non-numeric values that could not be converted to numeric.
+2024-10-26 13:45:30,470 - WARNING - 'Wiek' contains non-numeric values that could not be converted to numeric.
+2024-10-26 13:45:30,471 - WARNING - 'Wykształcenie' contains non-numeric values that could not be converted to numeric.
+2024-10-26 13:45:30,473 - WARNING - 'Średnie Zarobki' contains non-numeric values that could not be converted to numeric.
+2024-10-26 13:45:30,474 - WARNING - 'Czas Początkowy Podróży' contains non-numeric values that could not be converted to numeric.
+2024-10-26 13:45:30,475 - WARNING - 'Czas Końcowy Podróży' contains non-numeric values that could not be converted to numeric.
+2024-10-26 13:45:30,476 - WARNING - 'Cel Podróży' contains non-numeric values that could not be converted to numeric.
+2024-10-26 13:45:30,478 - INFO - Data cleaning process completed. Changed data percentage: 2.14%, Removed data percentage: 0.00%.
+2024-10-26 13:45:30,478 - INFO - Total missing values replaced in 'Płeć': 23
+2024-10-26 13:45:30,478 - INFO - Total missing values replaced in 'Wiek': 24
+2024-10-26 13:45:30,478 - INFO - Total missing values replaced in 'Wykształcenie': 19
+2024-10-26 13:45:30,478 - INFO - Total missing values replaced in 'Średnie Zarobki': 20
+2024-10-26 13:45:30,478 - INFO - Total missing values replaced in 'Czas Początkowy Podróży': 27
+2024-10-26 13:45:30,479 - INFO - Total missing values replaced in 'Czas Końcowy Podróży': 22
+2024-10-26 13:45:30,479 - INFO - Total missing values replaced in 'Cel Podróży': 15
+2024-10-26 13:45:30,485 - INFO - Cleaned data saved to cleaned_data.csv.
+2024-10-26 13:45:30,485 - INFO - Report generated and saved to report.md.
+2024-10-26 13:45:30,485 - INFO - Script finished.
