@@ -1,4 +1,4 @@
-name: Fetch data from Google Sheets
+name: Fetch Data from Google Sheets
 
 on:
   workflow_dispatch:
@@ -10,20 +10,69 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
+      - name: Checkout repository
+        uses: actions/checkout@v3  # Zaktualizowane do v3
+      
       - name: Set up Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v4  # Zaktualizowane do v4
         with:
           python-version: '3.x'
 
       - name: Install dependencies
         run: |
-          python -m pip install --upgrade pip
-          pip install gspread oauth2client
+          pip install -r requirements.txt
 
-      - name: Fetch data from Google Sheets
+      - name: Run script
+        env:
+          GOOGLE_SHEETS_CREDENTIALS: ${{ secrets.GOOGLE_SHEETS_CREDENTIALS }}
+        run: |
+          python your_script.py
+Po tej zmianie zapisz plik i zrób commit i push do repozytorium, aby uruchomić workflow ponownie.
+
+
+
+
+
+
+Powiedziałeś(-aś):
+napisz mi caly plik. yml ktory musze dokopiowac
+ChatGPT powiedział:
+ChatGPT
+Poniżej znajdziesz pełny przykład pliku .yml, który możesz dodać do katalogu .github/workflows w swoim repozytorium, np. jako fetch_data.yml. Ten workflow pobiera dane z Google Sheets, używając dostępu uwierzytelnionego przez GOOGLE_SHEETS_CREDENTIALS.
+
+Plik .yml do workflow GitHub Actions
+yaml
+Skopiuj kod
+name: Fetch Data from Google Sheets
+
+on:
+  workflow_dispatch:  # Ręczne uruchomienie z sekcji Actions
+  schedule:
+    - cron: '0 * * * *'  # Harmonogram co godzinę (dostosuj w razie potrzeby)
+
+jobs:
+  fetch_data:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Checkout repozytorium
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # 2. Ustawienie środowiska Python
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'  # Dostosuj wersję, jeśli konieczne
+
+      # 3. Instalacja zależności
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      # 4. Uruchomienie skryptu do pobrania danych z Google Sheets
+      - name: Run data fetching script
         env:
           GOOGLE_SHEETS_CREDENTIALS: ${{ secrets.GOOGLE_SHEETS_CREDENTIALS }}
         run: |
