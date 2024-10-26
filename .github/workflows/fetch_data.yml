@@ -1,9 +1,12 @@
 name: Fetch Data from Google Sheets
 
 on:
-  workflow_dispatch:
+  push:
+    branches:
+      - main  # Uruchamia workflow przy pushu na branch main
+  workflow_dispatch:  # Umożliwia ręczne uruchomienie z sekcji Actions
   schedule:
-    - cron: '0 * * * *'  # Harmonogram co godzinę
+    - cron: '0 * * * *'  # Uruchamia workflow co godzinę
 
 jobs:
   fetch_data:
