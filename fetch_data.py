@@ -43,11 +43,13 @@ def clean_data(df):
         num_changed = df_cleaned[column].isnull().sum()  # Count changed cells
         df_cleaned[column] = df_cleaned[column].fillna(mean_value)  # Use assignment instead of inplace
         changed_cells += num_changed  # Update changed cells count
+        logging.info(f"Filled {num_changed} missing values in '{column}' with mean value {mean_value:.2f}.")
 
     for column in df_cleaned.select_dtypes(exclude=[np.number]).columns:
         num_changed = df_cleaned[column].isnull().sum()  # Count changed cells
         df_cleaned[column] = df_cleaned[column].fillna('Brak danych')  # Use assignment instead of inplace
         changed_cells += num_changed  # Update changed cells count
+        logging.info(f"Filled {num_changed} missing values in '{column}' with 'Brak danych'.")
 
     for column in df_cleaned.select_dtypes(include=[object]).columns:
         df_cleaned[column] = pd.to_numeric(df_cleaned[column], errors='ignore')
