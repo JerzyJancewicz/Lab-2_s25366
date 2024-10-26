@@ -55,7 +55,8 @@ def generate_report(changed_percentage, removed_percentage):
 - **Percentage of removed data**: {removed_percentage:.2f}%
     """
     
-    with open('report.md', 'w') as f:
+    report_path = 'report.md'
+    with open(report_path, 'w') as f:
         f.write(report_content)
 
 if __name__ == "__main__":
@@ -63,8 +64,4 @@ if __name__ == "__main__":
     df = fetch_data(sheet_id)
     df_cleaned, changed_percentage, removed_percentage = clean_data(df)
 
-    print(df_cleaned)
-    df_cleaned.to_csv('cleaned_data.csv', index=False)
-
-    # Generate and save the report
     generate_report(changed_percentage, removed_percentage)

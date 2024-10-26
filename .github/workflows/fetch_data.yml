@@ -1,23 +1,21 @@
-name: Fetch Data from Google Sheets
+name: Data Cleaning Workflow
 
 on:
   push:
     branches:
       - main
   workflow_dispatch:
-  schedule:
-    - cron: '0 * * * *'
 
 jobs:
-  fetch_data:
+  run-data-cleaning:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v2
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v2
         with:
           python-version: '3.x'
 
@@ -26,12 +24,20 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Run data fetching script
-        env:
-          GOOGLE_SHEETS_CREDENTIALS: ${{ secrets.GOOGLE_SHEETS_CREDENTIALS }}
+      - name: Run data fetching and cleaning script
         run: |
           python fetch_data.py
 
-      - name: Display report
+      - name: Commit report to repository
         run: |
-          cat report.md
+          git config --local user.email "jancewiczjerzy@gmail.com"
+          git config --local user.name "JerzyJancewicz"
+          git add report.md
+          git commit -m "Add data cleaning report" || echo "No changes to commit"
+          git push
+
+      - name: Check if the workflow was triggered by this commit
+        if: github.event_name == 'push' && startsWith(github.event.head_commit.message, 'Add data cleaning report')
+        run: |
+          echo "Workflow triggered by report commit, skipping further steps."
+          exit 0  # Exit the workflow early to avoid recursion
