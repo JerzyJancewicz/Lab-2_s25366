@@ -1,51 +1,6 @@
 name: Fetch Data from Google Sheets
 
 on:
-  workflow_dispatch:
-  schedule:
-    - cron: '0 * * * *'  # co godzinę
-
-jobs:
-  fetch_data:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3  # Zaktualizowane do v3
-      
-      - name: Set up Python
-        uses: actions/setup-python@v4  # Zaktualizowane do v4
-        with:
-          python-version: '3.x'
-
-      - name: Install dependencies
-        run: |
-          pip install -r requirements.txt
-
-      - name: Run script
-        env:
-          GOOGLE_SHEETS_CREDENTIALS: ${{ secrets.GOOGLE_SHEETS_CREDENTIALS }}
-        run: |
-          python your_script.py
-Po tej zmianie zapisz plik i zrób commit i push do repozytorium, aby uruchomić workflow ponownie.
-
-
-
-
-
-
-Powiedziałeś(-aś):
-napisz mi caly plik. yml ktory musze dokopiowac
-ChatGPT powiedział:
-ChatGPT
-Poniżej znajdziesz pełny przykład pliku .yml, który możesz dodać do katalogu .github/workflows w swoim repozytorium, np. jako fetch_data.yml. Ten workflow pobiera dane z Google Sheets, używając dostępu uwierzytelnionego przez GOOGLE_SHEETS_CREDENTIALS.
-
-Plik .yml do workflow GitHub Actions
-yaml
-Skopiuj kod
-name: Fetch Data from Google Sheets
-
-on:
   workflow_dispatch:  # Ręczne uruchomienie z sekcji Actions
   schedule:
     - cron: '0 * * * *'  # Harmonogram co godzinę (dostosuj w razie potrzeby)
