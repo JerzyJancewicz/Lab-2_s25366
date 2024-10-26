@@ -41,7 +41,6 @@ def clean_data(df):
     numeric_cols = df_cleaned.select_dtypes(include=[np.number]).columns
     df_standardized = (df_cleaned[numeric_cols] - df_cleaned[numeric_cols].mean()) / df_cleaned[numeric_cols].std()
 
-    # Calculate percentages
     changed_percentage = (changed_cells / df.size) * 100 if df.size > 0 else 0
     removed_percentage = (removed_rows / original_size) * 100 if original_size > 0 else 0
 
