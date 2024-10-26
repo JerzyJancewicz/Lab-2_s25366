@@ -7,3 +7,19 @@
 2024-10-26 12:53:05,752 - INFO - Cleaned data saved to cleaned_data.csv.
 2024-10-26 12:53:05,752 - INFO - Report generated and saved to report.md.
 2024-10-26 12:53:05,752 - INFO - Script finished.
+2024-10-26 13:02:18,995 - INFO - Script started.
+2024-10-26 13:02:18,995 - INFO - Fetching data from Google Sheets.
+2024-10-26 13:02:20,132 - INFO - Data fetched successfully.
+2024-10-26 13:02:20,134 - INFO - Starting data cleaning process.
+2024-10-26 13:02:20,136 - INFO - Removed 0 rows during cleaning.
+2024-10-26 13:02:20,137 - INFO - Filled 0 missing values in 'Płeć' with 'Brak danych'.
+2024-10-26 13:02:20,137 - INFO - Filled 0 missing values in 'Wiek' with 'Brak danych'.
+2024-10-26 13:02:20,138 - INFO - Filled 0 missing values in 'Wykształcenie' with 'Brak danych'.
+2024-10-26 13:02:20,139 - INFO - Filled 0 missing values in 'Średnie Zarobki' with 'Brak danych'.
+2024-10-26 13:02:20,139 - INFO - Filled 0 missing values in 'Czas Początkowy Podróży' with 'Brak danych'.
+2024-10-26 13:02:20,140 - INFO - Filled 0 missing values in 'Czas Końcowy Podróży' with 'Brak danych'.
+2024-10-26 13:02:20,140 - INFO - Filled 0 missing values in 'Cel Podróży' with 'Brak danych'.
+2024-10-26 13:02:20,145 - INFO - Data cleaning process completed. Changed data percentage: 0.00%, Removed data percentage: 0.00%.
+2024-10-26 13:02:20,151 - INFO - Cleaned data saved to cleaned_data.csv.
+2024-10-26 13:02:20,151 - INFO - Report generated and saved to report.md.
+2024-10-26 13:02:20,151 - INFO - Script finished.
