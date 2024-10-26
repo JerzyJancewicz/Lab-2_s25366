@@ -1,0 +1,9 @@
+2024-10-26 12:53:04,549 - INFO - Script started.
+2024-10-26 12:53:04,549 - INFO - Fetching data from Google Sheets.
+2024-10-26 12:53:05,745 - INFO - Data fetched successfully.
+2024-10-26 12:53:05,747 - INFO - Starting data cleaning process.
+2024-10-26 12:53:05,748 - INFO - Removed 0 rows during cleaning.
+2024-10-26 12:53:05,751 - INFO - Data cleaning process completed. Changed data percentage: 0.00%, Removed data percentage: 0.00%.
+2024-10-26 12:53:05,752 - INFO - Cleaned data saved to cleaned_data.csv.
+2024-10-26 12:53:05,752 - INFO - Report generated and saved to report.md.
+2024-10-26 12:53:05,752 - INFO - Script finished.
