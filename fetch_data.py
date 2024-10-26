@@ -18,31 +18,46 @@ def fetch_data(sheet_id):
     return pd.DataFrame(data)
 
 def clean_data(df):
+    original_size = df.shape[0]  # Original number of rows
+    changed_cells = 0  # Counter for changed cells
+
     df_cleaned = df.dropna(thresh=len(df.columns) - 2)
+    removed_rows = original_size - df_cleaned.shape[0]  # Count removed rows
 
-    numeric_cols = df_cleaned.select_dtypes(include=[np.number]).columns
-    for column in numeric_cols:
-        df_cleaned[column] = df_cleaned[column].fillna(df_cleaned[column].mean())
+    for column in df_cleaned.select_dtypes(include=[np.number]).columns:
+        mean_value = df_cleaned[column].mean()
+        changed_cells += df_cleaned[column].isnull().sum()  # Count changed cells
+        df_cleaned[column].fillna(mean_value, inplace=True)
 
-    categorical_cols = df_cleaned.select_dtypes(exclude=[np.number]).columns
-    for column in categorical_cols:
-        df_cleaned[column] = df_cleaned[column].fillna('Brak danych')
+    for column in df_cleaned.select_dtypes(exclude=[np.number]).columns:
+        changed_cells += df_cleaned[column].isnull().sum()  # Count changed cells
+        df_cleaned[column].fillna('Brak danych', inplace=True)
 
-    for column in numeric_cols:
-        df_cleaned[column] = pd.to_numeric(df_cleaned[column], errors='coerce')
+    df_standardized = (df_cleaned - df_cleaned.mean()) / df_cleaned.std()
 
-    df_cleaned.dropna(subset=numeric_cols, inplace=True)
+    # Calculate percentages
+    changed_percentage = (changed_cells / df.size) * 100 if df.size > 0 else 0
+    removed_percentage = (removed_rows / original_size) * 100 if original_size > 0 else 0
 
-    df_standardized = (df_cleaned[numeric_cols] - df_cleaned[numeric_cols].mean()) / df_cleaned[numeric_cols].std()
+    return df_standardized, changed_percentage, removed_percentage
 
-    df_standardized = pd.concat([df_standardized, df_cleaned[categorical_cols].reset_index(drop=True)], axis=1)
+def generate_report(changed_percentage, removed_percentage):
+    report_content = f"""# Data Cleaning Report
 
-    return df_standardized
+## Summary
+- **Percentage of changed data**: {changed_percentage:.2f}%
+- **Percentage of removed data**: {removed_percentage:.2f}%
+    """
+    
+    with open('report.md', 'w') as f:
+        f.write(report_content)
 
 if __name__ == "__main__":
     sheet_id = '1qLz321mYARmPy-PmN1dVsYGWY47WLq9MzjAavGhJ7q8'
     df = fetch_data(sheet_id)
-    df_cleaned = clean_data(df)
+    df_cleaned, changed_percentage, removed_percentage = clean_data(df)
 
     print(df_cleaned)
     df_cleaned.to_csv('cleaned_data.csv', index=False)
+
+    generate_report(changed_percentage, removed_percentage)
