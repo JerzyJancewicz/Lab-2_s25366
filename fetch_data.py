@@ -29,37 +29,39 @@ def fetch_data(sheet_id):
     
     return pd.DataFrame(data)
 
-def clean_data(df):
+def clean_data(df, threshold=0.7):
     logging.info("Starting data cleaning process.")
-    original_size = df.shape[0]  # Original number of rows
-    changed_cells = 0  # Counter for changed cells
-    missing_summary = {}  # Dictionary to summarize missing values
+    original_size = df.shape[0]
+    changed_cells = 0
+    missing_summary = {}
 
-    df_cleaned = df.dropna(thresh=len(df.columns) - 2)  # Adjust this threshold as necessary
-    removed_rows = original_size - df_cleaned.shape[0]  # Count removed rows
+    def is_missing(value):
+        return pd.isna(value) or (isinstance(value, str) and value.strip() == '')
+
+    df_cleaned = df.dropna(thresh=int(threshold * len(df.columns)))  # Keep rows with at least 70% non-NaN values
+    removed_rows = original_size - df_cleaned.shape[0]
     logging.info(f"Removed {removed_rows} rows during cleaning.")
 
     for column in df_cleaned.select_dtypes(include=[np.number]).columns:
-        num_missing = df[column].isnull().sum()  # Count original missing cells
+        num_missing = df[column].isnull().sum() + df[column].apply(is_missing).sum()
         if num_missing > 0:
             mean_value = df[column].mean()
-            df[column] = df[column].fillna(mean_value)  # Fill missing values with mean
-            changed_cells += num_missing  # Update changed cells count
-            missing_summary[column] = num_missing  # Log missing counts
+            df[column] = df[column].replace('', np.nan).fillna(mean_value)
+            changed_cells += num_missing
+            missing_summary[column] = num_missing
             logging.info(f"Filled {num_missing} missing values in '{column}' with mean value {mean_value:.2f}.")
 
     for column in df_cleaned.select_dtypes(exclude=[np.number]).columns:
-        num_missing = df[column].isnull().sum()  # Count original missing cells
+        num_missing = df[column].isnull().sum() + df[column].apply(is_missing).sum()
         if num_missing > 0:
-            df[column] = df[column].fillna('Brak danych')  # Fill missing values with 'Brak danych'
-            changed_cells += num_missing  # Update changed cells count
-            missing_summary[column] = missing_summary.get(column, 0) + num_missing  # Log missing counts
+            df[column] = df[column].replace('', 'Brak danych').fillna('Brak danych')
+            changed_cells += num_missing
+            missing_summary[column] = missing_summary.get(column, 0) + num_missing
             logging.info(f"Filled {num_missing} missing values in '{column}' with 'Brak danych'.")
 
     for column in df_cleaned.select_dtypes(include=[object]).columns:
-        # Attempt conversion and catch conversion issues
         df_cleaned[column] = pd.to_numeric(df_cleaned[column], errors='ignore')
-        num_changed = df_cleaned[column].isnull().sum()
+        num_changed = df_cleaned[column].isnull().sum() + df_cleaned[column].apply(is_missing).sum()
         if num_changed > 0:
             logging.warning(f"'{column}' contains non-numeric values that could not be converted to numeric.")
 
