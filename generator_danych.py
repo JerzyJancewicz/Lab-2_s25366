@@ -52,7 +52,7 @@ def generate_data(student_number, n_samples=1000):
     # Wprowadzenie braków (losowo wybrane pojedyncze braki)
     for _ in range(n_missing):
         idx = random.randint(0, n_samples - 1)
-        col = random.choice(df.columns)
+        col = random.choice(list(df.columns))  # Zamiana df.columns na list(df.columns)
         df.at[idx, col] = np.nan
     
     # Wprowadzenie niepełnych danych (losowo wybrane wiersze z tylko 2 uzupełnionymi kolumnami)
@@ -93,4 +93,3 @@ if __name__ == "__main__":
     df.to_csv(filename, index=False)
     
     print(f"Dane zostały wygenerowane i zapisane w pliku '{filename}'")
-
