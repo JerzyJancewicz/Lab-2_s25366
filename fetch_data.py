@@ -6,13 +6,12 @@ from oauth2client.service_account import ServiceAccountCredentials
 import numpy as np
 import logging
 
-# Set up logging
 logging.basicConfig(
-    level=logging.INFO,  # Set the logging level
+    level=logging.INFO,
     format='%(asctime)s - %(levelname)s - %(message)s',
     handlers=[
-        logging.FileHandler('log.txt'),  # Log to a file
-        logging.StreamHandler()            # Log to console
+        logging.FileHandler('log.txt'),
+        logging.StreamHandler()
     ]
 )
 
@@ -35,7 +34,6 @@ def clean_data(df):
     original_size = df.shape[0]  # Original number of rows
     changed_cells = 0  # Counter for changed cells
 
-    # Dropping rows with too many NaN values
     df_cleaned = df.dropna(thresh=len(df.columns) - 2)
     removed_rows = original_size - df_cleaned.shape[0]  # Count removed rows
     logging.info(f"Removed {removed_rows} rows during cleaning.")
@@ -57,7 +55,6 @@ def clean_data(df):
     numeric_cols = df_cleaned.select_dtypes(include=[np.number]).columns
     df_standardized = (df_cleaned[numeric_cols] - df_cleaned[numeric_cols].mean()) / df_cleaned[numeric_cols].std()
 
-    # Calculate percentages
     changed_percentage = (changed_cells / df.size) * 100 if df.size > 0 else 0
     removed_percentage = (removed_rows / original_size) * 100 if original_size > 0 else 0
 

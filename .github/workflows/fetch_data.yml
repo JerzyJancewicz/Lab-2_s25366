@@ -34,7 +34,7 @@ jobs:
         run: |
           git config --local user.email "jancewiczjerzy@gmail.com"
           git config --local user.name "JerzyJancewicz"
-          git add report.md
+          git add report.md log.txt
           git commit -m "Add data cleaning report" || echo "No changes to commit"
           git push
 
