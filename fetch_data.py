@@ -34,7 +34,7 @@ def clean_data(df):
     original_size = df.shape[0]  # Original number of rows
     changed_cells = 0  # Counter for changed cells
 
-    df_cleaned = df.dropna(thresh=len(df.columns) - 2)
+    df_cleaned = df.dropna(thresh=len(df.columns) - 2)  # Adjust this threshold as necessary
     removed_rows = original_size - df_cleaned.shape[0]  # Count removed rows
     logging.info(f"Removed {removed_rows} rows during cleaning.")
 
@@ -52,10 +52,17 @@ def clean_data(df):
         logging.info(f"Filled {num_changed} missing values in '{column}' with 'Brak danych'.")
 
     for column in df_cleaned.select_dtypes(include=[object]).columns:
+        # Attempt conversion and catch conversion issues
         df_cleaned[column] = pd.to_numeric(df_cleaned[column], errors='ignore')
+        num_changed = df_cleaned[column].isnull().sum()
+        if num_changed > 0:
+            logging.warning(f"'{column}' contains non-numeric values that could not be converted to numeric.")
 
     numeric_cols = df_cleaned.select_dtypes(include=[np.number]).columns
-    df_standardized = (df_cleaned[numeric_cols] - df_cleaned[numeric_cols].mean()) / df_cleaned[numeric_cols].std()
+    if not numeric_cols.empty:
+        df_standardized = (df_cleaned[numeric_cols] - df_cleaned[numeric_cols].mean()) / df_cleaned[numeric_cols].std()
+    else:
+        df_standardized = df_cleaned  # No numeric columns to standardize
 
     changed_percentage = (changed_cells / df.size) * 100 if df.size > 0 else 0
     removed_percentage = (removed_rows / original_size) * 100 if original_size > 0 else 0
@@ -86,6 +93,5 @@ if __name__ == "__main__":
     df_cleaned.to_csv('cleaned_data.csv', index=False)
     logging.info("Cleaned data saved to cleaned_data.csv.")
 
-    # Generate and save the report
     generate_report(changed_percentage, removed_percentage)
     logging.info("Script finished.")
