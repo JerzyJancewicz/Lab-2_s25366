@@ -5,7 +5,6 @@ import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 import numpy as np
 
-# Funkcja do pobierania danych z Google Sheets
 def fetch_data(sheet_id):
     credentials_dict = json.loads(os.getenv("GOOGLE_SHEETS_CREDENTIALS"))
     creds = ServiceAccountCredentials.from_json_keyfile_dict(
@@ -19,23 +18,28 @@ def fetch_data(sheet_id):
     return pd.DataFrame(data)
 
 def clean_data(df):
-    # Usuwanie wierszy z nadmiernymi brakującymi wartościami
     df_cleaned = df.dropna(thresh=len(df.columns) - 2)
 
-    # Uzupełnianie brakujących wartości średnią dla kolumn numerycznych
-    for column in df_cleaned.select_dtypes(include=[np.number]).columns:
-        df_cleaned[column].fillna(df_cleaned[column].mean(), inplace=True)
+    numeric_cols = df_cleaned.select_dtypes(include=[np.number]).columns
+    for column in numeric_cols:
+        df_cleaned[column] = df_cleaned[column].fillna(df_cleaned[column].mean())
 
-    # Uzupełnianie braków dla kolumn kategorycznych z wartością domyślną
-    for column in df_cleaned.select_dtypes(exclude=[np.number]).columns:
-        df_cleaned[column].fillna('Brak danych', inplace=True)
+    categorical_cols = df_cleaned.select_dtypes(exclude=[np.number]).columns
+    for column in categorical_cols:
+        df_cleaned[column] = df_cleaned[column].fillna('Brak danych')
 
-    df_standardized = (df_cleaned - df_cleaned.mean()) / df_cleaned.std()
+    for column in numeric_cols:
+        df_cleaned[column] = pd.to_numeric(df_cleaned[column], errors='coerce')
+
+    df_cleaned.dropna(subset=numeric_cols, inplace=True)
+
+    df_standardized = (df_cleaned[numeric_cols] - df_cleaned[numeric_cols].mean()) / df_cleaned[numeric_cols].std()
+
+    df_standardized = pd.concat([df_standardized, df_cleaned[categorical_cols].reset_index(drop=True)], axis=1)
 
     return df_standardized
 
 if __name__ == "__main__":
-
     sheet_id = '1qLz321mYARmPy-PmN1dVsYGWY47WLq9MzjAavGhJ7q8'
     df = fetch_data(sheet_id)
     df_cleaned = clean_data(df)
