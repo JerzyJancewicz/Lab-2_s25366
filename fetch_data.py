@@ -26,14 +26,20 @@ def clean_data(df):
 
     for column in df_cleaned.select_dtypes(include=[np.number]).columns:
         mean_value = df_cleaned[column].mean()
-        changed_cells += df_cleaned[column].isnull().sum()  # Count changed cells
-        df_cleaned[column].fillna(mean_value, inplace=True)
+        num_changed = df_cleaned[column].isnull().sum()  # Count changed cells
+        df_cleaned[column] = df_cleaned[column].fillna(mean_value)  # Use assignment instead of inplace
+        changed_cells += num_changed  # Update changed cells count
 
     for column in df_cleaned.select_dtypes(exclude=[np.number]).columns:
-        changed_cells += df_cleaned[column].isnull().sum()  # Count changed cells
-        df_cleaned[column].fillna('Brak danych', inplace=True)
+        num_changed = df_cleaned[column].isnull().sum()  # Count changed cells
+        df_cleaned[column] = df_cleaned[column].fillna('Brak danych')  # Use assignment instead of inplace
+        changed_cells += num_changed  # Update changed cells count
 
-    df_standardized = (df_cleaned - df_cleaned.mean()) / df_cleaned.std()
+    for column in df_cleaned.select_dtypes(include=[object]).columns:
+        df_cleaned[column] = pd.to_numeric(df_cleaned[column], errors='ignore')
+
+    numeric_cols = df_cleaned.select_dtypes(include=[np.number]).columns
+    df_standardized = (df_cleaned[numeric_cols] - df_cleaned[numeric_cols].mean()) / df_cleaned[numeric_cols].std()
 
     # Calculate percentages
     changed_percentage = (changed_cells / df.size) * 100 if df.size > 0 else 0
@@ -60,4 +66,5 @@ if __name__ == "__main__":
     print(df_cleaned)
     df_cleaned.to_csv('cleaned_data.csv', index=False)
 
+    # Generate and save the report
     generate_report(changed_percentage, removed_percentage)
