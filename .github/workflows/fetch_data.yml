@@ -32,13 +32,13 @@ jobs:
 
       - name: Commit report to repository
         env:
-          PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
+          GIT_TOKEN: ${{ secrets.GIT_TOKEN }}
         run: |
           git config --local user.email "jancewiczjerzy@gmail.com"
           git config --local user.name "JerzyJancewicz"
           git add report.md
           git commit -m "Add data cleaning report" || echo "No changes to commit"
-          git push https://x-access-token:${PAT_TOKEN}@github.com/JerzyJancewicz/Lab-2_s25366.git HEAD:main
+          git push https://x-access-token:${GIT_TOKEN}@github.com/JerzyJancewicz/Lab-2_s25366.git HEAD:main
 
       - name: Check if the workflow was triggered by this commit
         if: github.event_name == 'push' && startsWith(github.event.head_commit.message, 'Add data cleaning report')
